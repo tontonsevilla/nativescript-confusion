@@ -19,4 +19,8 @@
         <Label col="0" [text]="'fa-info-circle' | fonticon" class="sidedrawer-list-item-text fa"></Label>
         <Label col="1" text="About Us" class="sidedrawer-list-item-text"></Label>
     </GridLayout>
+    <GridLayout columns="*, auto" class="sidedrawer-list-item" [nsRouterLink]="['/favorites']" clearHistory>
+        <Label col="0" [text]="'fa-heart' | fonticon" class="sidedrawer-list-item-text fa"></Label>
+        <Label col="1" text="My Favorites" class="sidedrawer-list-item-text"></Label>
+    </GridLayout>
 </StackLayout>
