@@ -1,10 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ChangeDetectorRef } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { DishService } from '../services/dish.service';
 import { Promotion } from '../shared/promotion';
 import { PromotionService } from '../services/promotion.service';
 import { Leader } from '../shared/leader';
 import { LeaderService } from '../services/leader.service';
+import { DrawerPage } from '~/shared/drawer/drawer.page';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +13,7 @@ import { LeaderService } from '../services/leader.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent extends DrawerPage implements OnInit {
 
   dish: Dish;
   promotion: Promotion;
@@ -24,7 +25,10 @@ export class HomeComponent implements OnInit {
   constructor(private dishservice: DishService,
     private promotionservice: PromotionService,
     private leaderservice: LeaderService,
-    @Inject('baseURL') private baseURL) { }
+    private changeDetectorRef: ChangeDetectorRef,
+    @Inject('baseURL') private baseURL) { 
+      super(changeDetectorRef);
+    }
 
   ngOnInit() {
     this.dishservice.getFeaturedDish()

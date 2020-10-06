@@ -18,30 +18,30 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this._activatedUrl = "/menu";
-        this._sideDrawerTransition = new SlideInOnTopTransition();
+        // this._activatedUrl = "/menu";
+        // this._sideDrawerTransition = new SlideInOnTopTransition();
 
-        this.router.events
-        .pipe(filter((event: any) => event instanceof NavigationEnd))
-        .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
+        // this.router.events
+        // .pipe(filter((event: any) => event instanceof NavigationEnd))
+        // .subscribe((event: NavigationEnd) => this._activatedUrl = event.urlAfterRedirects);
     }
 
-    get sideDrawerTransition(): DrawerTransitionBase {
-        return this._sideDrawerTransition;
-    }
+    // get sideDrawerTransition(): DrawerTransitionBase {
+    //     return this._sideDrawerTransition;
+    // }
 
-    isComponentSelected(url: string): boolean {
-        return this._activatedUrl === url;
-    }
+    // isComponentSelected(url: string): boolean {
+    //     return this._activatedUrl === url;
+    // }
 
-    onNavItemTap(navItemRoute: string): void {
-        this.routerExtensions.navigate([navItemRoute], {
-            transition: {
-                name: "fade"
-            }
-        });
+    // onNavItemTap(navItemRoute: string): void {
+    //     this.routerExtensions.navigate([navItemRoute], {
+    //         transition: {
+    //             name: "fade"
+    //         }
+    //     });
 
-        const sideDrawer = <RadSideDrawer>app.getRootView();
-        sideDrawer.closeDrawer();
-    }
+    //     const sideDrawer = <RadSideDrawer>app.getRootView();
+    //     sideDrawer.closeDrawer();
+    // }
 }

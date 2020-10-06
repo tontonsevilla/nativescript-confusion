@@ -25,16 +25,16 @@ refer to http://docs.nativescript.org/ui/theme.
     background-color: #D1C4E9;
 }
 
-.sidedrawer-header {
+.sidedrawer-left .sidedrawer-header {
     background-color: #512DA8;
 }
 
-.sidedrawer-header .sidedrawer-header-image {
+.sidedrawer-left .sidedrawer-header .sidedrawer-header-image {
     background-color: #512DA8;
     margin: 10;
 }
 
-.sidedrawer-header .sidedrawer-header-brand {
+.sidedrawer-left .sidedrawer-header .sidedrawer-header-brand {
     color: #ffffff;
     font-size: 30;
 }

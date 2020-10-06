@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { DrawerPage } from '~/shared/drawer/drawer.page';
 
 
 @Component({
@@ -7,9 +8,13 @@ import { Component } from '@angular/core';
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.css']
 })
-export class ContactComponent {
+export class ContactComponent extends DrawerPage {
 
 
-  constructor() { }
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+  ) { 
+    super(changeDetectorRef);
+  }
 
 }

@@ -1,0 +1,18 @@
+<GridLayout row="0" class="sidedrawer-header" rows="auto" columns="100, *">
+    <Image row="0" col="0" src="~/images/logo.png" class="sidedrawer-header-image"></Image>
+    <Label row="0" col="1" text="Ristorante Con Fusion" class="sidedrawer-header-brand" textWrap="true"></Label>
+</GridLayout>
+<StackLayout class="sidedrawer-content">
+    <GridLayout columns="auto" class="sidedrawer-list-item" [nsRouterLink]="['/home']" clearHistory>
+        <Label col="1" text="Home" class="sidedrawer-list-item-text"></Label>
+    </GridLayout>
+    <GridLayout columns="auto" class="sidedrawer-list-item" [nsRouterLink]="['/menu']" clearHistory>
+        <Label col="1" text="Menu" class="sidedrawer-list-item-text"></Label>
+    </GridLayout>
+    <GridLayout columns="auto" class="sidedrawer-list-item" [nsRouterLink]="['/contactus']" clearHistory>
+        <Label col="1" text="Contact {{ variable | uppercase }}" class="sidedrawer-list-item-text"></Label>
+    </GridLayout>
+    <GridLayout columns="auto" class="sidedrawer-list-item" [nsRouterLink]="['/aboutus']" clearHistory>
+        <Label col="1" text="About Us" class="sidedrawer-list-item-text"></Label>
+    </GridLayout>
+</StackLayout>

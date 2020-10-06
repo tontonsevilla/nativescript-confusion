@@ -1,5 +1,6 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { LeaderService } from '~/services/leader.service';
+import { DrawerPage } from '~/shared/drawer/drawer.page';
 import { Leader } from '~/shared/leader';
 
 
@@ -9,15 +10,18 @@ import { Leader } from '~/shared/leader';
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.css']
 })
-export class AboutComponent implements OnInit {
+export class AboutComponent extends DrawerPage implements OnInit {
 
     errMess: string;
     leaders: Leader[];
 
     constructor(
         private leaderService: LeaderService,
+        private changeDetectorRef: ChangeDetectorRef,
         @Inject('baseURL') private baseURL
-    ) { }
+    ) { 
+        super(changeDetectorRef);
+    }
 
     ngOnInit(): void {
         this.leaderService.getLeaders()
