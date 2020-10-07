@@ -9,10 +9,9 @@ import { map } from 'rxjs/operators';
 })
 export class FavoriteService {
 
-    favorites: Array<string>;
+    favorites: Array<string> = [];
 
     constructor(private dishservice: DishService) {
-        this.favorites = [];
     }
 
     isFavorite(id: string): boolean {
@@ -32,7 +31,8 @@ export class FavoriteService {
     }
 
     deleteFavorite(id: string): Observable<Dish[]> {
-        let index = this.favorites.indexOf(id);
+        let index = this.favorites.indexOf(id.toString());
+
         if (index >= 0) {
             this.favorites.splice(index,1);
             return this.getFavorites();

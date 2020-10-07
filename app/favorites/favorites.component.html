@@ -6,12 +6,15 @@
             <drawer-content></drawer-content>
          </StackLayout>
     </ScrollView>
-    <StackLayout class="page">
+    <StackLayout tkMainContent class="page">
         <RadListView #myListView [items]="favorites" *ngIf="favorites"
             selectionBehavior="none" (itemSwipeProgressEnded)="onSwipeCellFinished($event)"
             (itemSwipeProgressStarted)="onSwipeCellStarted($event)"
             (itemSwipeProgressChanged)="onCellSwiping($event)"
             swipeActions="true">
+            <StackLayout>
+                <Label text="TEST"></Label>
+            </StackLayout>
             <ListViewLinearLayout tkListViewLayout scrollDirection="vertical"
                 itemInsertAnimation="Default" itemDeleteAnimation="Default">
             </ListViewLinearLayout>
