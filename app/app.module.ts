@@ -19,6 +19,7 @@ import { AboutComponent } from "./about/about.component";
 import { DrawerComponent } from "./shared/drawer/drawer.component";
 import { FavoritesComponent } from './favorites/favorites.component';
 import { ReservationComponent } from "./reservation/reservation.component";
+import { ReservationModalComponent } from "./reservationmodal/reservationmodal.component";
 
 import { DishService } from './services/dish.service';
 import { ProcessHTTPMsgService } from './services/process-httpmsg.service';
@@ -27,7 +28,6 @@ import { LeaderService } from './services/leader.service';
 import { FavoriteService } from "./services/favorite.service";
 
 import { baseURL } from './shared/baseurl';
-
 
 // Uncomment and add to NgModule imports if you need to use two-way binding
 // import { NativeScriptFormsModule } from "nativescript-angular/forms";
@@ -61,8 +61,10 @@ import { baseURL } from './shared/baseurl';
         AboutComponent,
         DrawerComponent,
         FavoritesComponent,
-        ReservationComponent
+        ReservationComponent,
+        ReservationModalComponent
     ],
+    entryComponents: [ReservationModalComponent],
     providers: [
         {provide: 'baseURL', useValue: baseURL},
         DishService,
