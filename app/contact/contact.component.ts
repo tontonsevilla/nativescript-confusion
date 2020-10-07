@@ -17,4 +17,8 @@ export class ContactComponent extends DrawerPage {
     super(changeDetectorRef);
   }
 
+  onDrawerButtonTap(): void {
+    this.openDrawer();
+}
+
 }

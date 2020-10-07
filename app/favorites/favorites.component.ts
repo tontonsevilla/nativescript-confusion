@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
+import { Component, OnInit, Inject, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { FavoriteService } from '../services/favorite.service';
 import { Dish } from '../shared/dish';
 import { ListViewEventData, RadListView } from 'nativescript-ui-listview';
@@ -7,6 +7,7 @@ import { ObservableArray } from 'tns-core-modules/data/observable-array';
 import { View } from 'tns-core-modules/ui/core/view';
 import { confirm } from "ui/dialogs";
 import { Toasty } from 'nativescript-toasty';
+import { DrawerPage } from '~/shared/drawer/drawer.page';
 
 @Component({
     selector: 'app-favorites',
@@ -14,7 +15,7 @@ import { Toasty } from 'nativescript-toasty';
     templateUrl: './favorites.component.html',
     styleUrls: ['./favorites.component.css']
 })
-export class FavoritesComponent implements OnInit {
+export class FavoritesComponent extends DrawerPage implements OnInit {
 
     favorites: ObservableArray<Dish>;
     errMess: string;
@@ -23,8 +24,10 @@ export class FavoritesComponent implements OnInit {
 
     constructor(
         private favoriteservice: FavoriteService,
+        private changeDetectorRef: ChangeDetectorRef,
         @Inject('baseURL') private baseURL
     ) {
+        super(changeDetectorRef);
     }
 
     ngOnInit() {
@@ -104,4 +107,9 @@ export class FavoritesComponent implements OnInit {
         this.deleteFavorite(args.object.bindingContext.id);
         this.listViewComponent.listView.notifySwipeToExecuteFinished();
     }
+
+    onDrawerButtonTap(): void {
+        this.openDrawer();
+    }
+
 }

@@ -28,4 +28,8 @@ export class MenuComponent extends DrawerPage implements OnInit {
         errmess => this.errMess = <any>errmess);
   }
 
+  onDrawerButtonTap(): void {
+    this.openDrawer();
+}
+
 }

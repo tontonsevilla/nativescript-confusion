@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { LeaderService } from '~/services/leader.service';
 import { DrawerPage } from '~/shared/drawer/drawer.page';
 import { Leader } from '~/shared/leader';
-
+import * as app from "application";
 
 @Component({
   selector: 'app-about',
@@ -27,6 +27,10 @@ export class AboutComponent extends DrawerPage implements OnInit {
         this.leaderService.getLeaders()
             .subscribe(leaders => this.leaders = leaders,
                 errmess => this.errMess = <any>errmess);
+    }
+
+    onDrawerButtonTap(): void {
+        this.openDrawer();
     }
 
 }
