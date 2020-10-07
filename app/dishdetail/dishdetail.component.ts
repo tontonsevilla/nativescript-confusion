@@ -32,7 +32,7 @@ export class DishdetailComponent implements OnInit {
     private routerExtensions: RouterExtensions,
     private favoriteservice: FavoriteService,
     private modalService: ModalDialogService,
-    private vcRef: ViewContainerRef
+    private vcRef: ViewContainerRef,
     @Inject('baseURL') private baseURL
   ) {}
 
