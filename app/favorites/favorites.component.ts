@@ -52,7 +52,7 @@ export class FavoritesComponent implements OnInit {
     
               this.favorites = null;
     
-              this.favoriteservice.deleteFavorite(id)
+              this.favoriteservice.deleteFavorite(Number.parseInt(id))
                   .subscribe(favorites => { 
                     const toast = new Toasty("Deleted Dish "+ id, "short", "bottom");
                     toast.show();
