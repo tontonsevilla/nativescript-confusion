@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, ViewContainerRef } from '@angular/core';
 import { Dish } from '../shared/dish';
 import { Comment } from '../shared/comment';
 import { DishService } from '../services/dish.service';
@@ -7,15 +7,17 @@ import { RouterExtensions } from 'nativescript-angular/router';
 import { switchMap } from 'rxjs/operators';
 import { FavoriteService } from '~/services/favorite.service';
 import { Toasty } from 'nativescript-toasty';
+import * as dialogs from 'tns-core-modules/ui/dialogs';
+import { ModalDialogService, ModalDialogOptions } from 'nativescript-angular/modal-dialog';
+import { CommentComponent } from '~/comment/comment.component';
 
 @Component({
   selector: 'app-dishdetail',
-    moduleId: module.id,
+  moduleId: module.id,
   templateUrl: './dishdetail.component.html',
-  styleUrls: ['./dishdetail.component.css']
+  styleUrls: ['./dishdetail.component.css'],
 })
 export class DishdetailComponent implements OnInit {
-
   dish: Dish;
   comment: Comment;
   errMess: string;
@@ -29,36 +31,93 @@ export class DishdetailComponent implements OnInit {
     private route: ActivatedRoute,
     private routerExtensions: RouterExtensions,
     private favoriteservice: FavoriteService,
+    private modalService: ModalDialogService,
+    private vcRef: ViewContainerRef
     @Inject('baseURL') private baseURL
-  ) { }
+  ) {}
 
   ngOnInit() {
 
     this.route.params
-      .pipe(switchMap((params: Params) => this.dishservice.getDish(params['id'])))
-      .subscribe(dish => { 
+      .pipe(
+        switchMap((params: Params) => this.dishservice.getDish(params['id']))
+      )
+      .subscribe(
+        (dish) => {
           this.dish = dish;
-          this.favorite = this.favoriteservice.isFavorite(this.dish.id.toString());
-          this.numcomments = this.dish.comments.length;
-
-          let total = 0;
-          this.dish.comments.forEach(comment => total += comment.rating);
-          this.avgstars = (total/this.numcomments).toFixed(2);
+          this.favorite = this.favoriteservice.isFavorite(
+            this.dish.id.toString()
+          );
+          
+          this.setOtherDetails();
         },
-        errmess => { this.dish = null; this.errMess = <any>errmess; });
+        (errmess) => {
+          this.dish = null;
+          this.errMess = <any>errmess;
+        }
+      );
+  }
+
+  private setOtherDetails(): void {
+    this.numcomments = this.dish.comments.length;
+    let total = 0;
+    this.dish.comments.forEach((comment) => (total += comment.rating));
+    this.avgstars = (total / this.numcomments).toFixed(2);
   }
 
   addToFavorites() {
     if (!this.favorite) {
       console.log('Adding to Favorites', this.dish.id);
       this.favorite = this.favoriteservice.addFavorite(this.dish.id.toString());
-      const toast = new Toasty("Added Dish "+ this.dish.id, "short", "bottom");
+      const toast = new Toasty('Added Dish ' + this.dish.id, 'short', 'bottom');
       toast.show();
-      console.log("Favorite count " + this.favoriteservice.favorites.length.toString());
+      console.log(
+        'Favorite count ' + this.favoriteservice.favorites.length.toString()
+      );
     }
   }
 
   goBack(): void {
     this.routerExtensions.back();
   }
+
+  showMoreAction(): void {
+    dialogs
+      .action({
+        message: 'More Actions',
+        cancelButtonText: 'Cancel',
+        actions: ['Add to Favorites', 'Add Comment'],
+      })
+      .then((result) => {
+        console.log('Dialog result: ' + result);
+        if (result == 'Add to Favorites') {
+          this.addToFavorites();
+        } else if (result == 'Add Comment') {
+          let options: ModalDialogOptions = {
+            viewContainerRef: this.vcRef,
+            fullscreen: false,
+          };
+
+          this.modalService
+            .showModal(CommentComponent, options)
+            .then((result: any) => {
+              if (result) {
+                this.comment = result;
+                this.comment.date = new Date().toISOString();
+                this.dish.comments.push(this.comment);
+                const toast = new Toasty(
+                  'Added a new comment successfully.',
+                  'short',
+                  'bottom'
+                );
+                toast.show();
+
+                this.setOtherDetails();
+              }
+            });
+        }
+      });
+  }
+
+  
 }
