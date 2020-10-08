@@ -4,6 +4,7 @@ import { Switch } from 'ui/switch';
 import { Validators, FormBuilder, FormGroup} from '@angular/forms';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { ReservationModalComponent } from "../reservationmodal/reservationmodal.component";
+import { DrawerPage } from '~/shared/drawer/drawer.page';
 
 @Component({
     selector: 'app-reservation',
@@ -11,15 +12,19 @@ import { ReservationModalComponent } from "../reservationmodal/reservationmodal.
     templateUrl: './reservation.component.html',
     styleUrls: ['./reservation.component.css']
 })
-export class ReservationComponent implements OnInit {
+export class ReservationComponent extends DrawerPage implements OnInit {
 
     reservation: FormGroup;
 
     constructor(
         private formBuilder: FormBuilder,
         private modalService: ModalDialogService, 
-        private vcRef: ViewContainerRef
+        private vcRef: ViewContainerRef,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
+
+        super(changeDetectorRef);
+
         this.reservation = this.formBuilder.group({
             guests: 3,
             smoking: false,
@@ -76,4 +81,9 @@ export class ReservationComponent implements OnInit {
             });
 
     }
+
+    onDrawerButtonTap(): void {
+        this.openDrawer();
+    }
+
 }
