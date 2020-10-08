@@ -9,30 +9,44 @@
     NavigationButton as a side-drawer button in iOS is not possible,
     because its function is to always navigate back in the application.
     -->
-    <ActionItem icon="res://menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()"
-        ios.position="left">
+    <ActionItem icon="res://menu" android:visibility="collapsed" (tap)="onDrawerButtonTap()" ios.position="left">
     </ActionItem>
 </ActionBar>
 <RadSideDrawer #drawerComponent tkToggleNavButton showOverNavigation="true">
     <ScrollView tkDrawerContent class="sidedrawer-left">
         <StackLayout horizontalAlign="left">
-           <drawer-content></drawer-content>
+            <drawer-content></drawer-content>
         </StackLayout>
-   </ScrollView>
+    </ScrollView>
     <ScrollView orientation="vertical" tkMainContent class="page">
-        <GridLayout class="m-5" rows="auto auto auto auto" columns="*, *" [formGroup]="reservation">
-            <Label class="h3 m-15" row="0" col="0" text="No. of Guests" textWrap="true"></Label>
-            <TextField class="input input-border" id="textGuests" hint="Enter Number of Guests" [text]=''
-                (tap)="createModalView('guest')" (textChange)="onGuestChange($event)" row="0" col="1"
-                formControlName="guests"></TextField>
-            <Label class="h3 m-15" row="1" col="0" text="Smoking?" textWrap="true"></Label>
-            <Switch class="m-15" row="1" col="1" checked="false" (checkedChange)="onSmokingChecked($event)"
-                formControlName="smoking"></Switch>
-            <Label class="h3 m-15" row="2" col="0" text="Date and Time" textWrap="true"></Label>
-            <TextField class="input input-border" id="textDateTime" hint="Enter Date and Time" [text]=''
-                (tap)="createModalView('date-time')" (textChange)="onDateTimeChange($event)" row="2" col="1"
-                formControlName="dateTime"></TextField>
-            <Button class="btn btn-primary btn-active m-15" row="3" col="0" text="Submit" (tap)="onSubmit()"></Button>
+        <GridLayout class="m-5" [formGroup]="reservation" rows="auto, auto" columns="*">
+            <StackLayout row="0" col="0" id="reservationForm" [visibility]="submitted ? 'collapsed' : 'visible'">
+                <GridLayout rows="auto auto auto auto" columns="*, *">
+                    <Label class="h3 m-15" row="0" col="0" text="No. of Guests" textWrap="true"></Label>
+                <TextField class="input input-border" id="textGuests" hint="Enter Number of Guests" [text]=''
+                    (tap)="createModalView('guest')" (textChange)="onGuestChange($event)" row="0" col="1"
+                    formControlName="guests" Editable="false"></TextField>
+                <Label class="h3 m-15" row="1" col="0" text="Smoking?" textWrap="true"></Label>
+                <Switch class="m-15" row="1" col="1" checked="false" (checkedChange)="onSmokingChecked($event)"
+                    formControlName="smoking"></Switch>
+                <Label class="h3 m-15" row="2" col="0" text="Date and Time" textWrap="true"></Label>
+                <TextField class="input input-border" id="textDateTime" hint="Enter Date and Time" [text]=''
+                    (tap)="createModalView('date-time')" (textChange)="onDateTimeChange($event)" row="2" col="1"
+                    formControlName="dateTime"></TextField>
+                <Button class="btn btn-primary btn-active m-15" row="3" col="0" text="Submit"
+                    (tap)="onSubmit()" [isEnabled]="reservation.valid"></Button>
+                </GridLayout>
+            </StackLayout>
+            <StackLayout row="1" col="0" id="reservationFormReadOnly" [visibility]="submitted ? 'visible' : 'collapsed'">
+                <GridLayout rows="auto auto auto" columns="*, *">
+                    <Label class="h3" row="0" col="0" text="No. of Guests"></Label>
+                    <Label row="0" col="1" [text]="reservation.controls['guests'].value" textWrap="true"></Label>
+                    <Label class="h3" row="1" col="0" text="Smoking?"></Label>
+                    <Label row="1" col="1" [text]="reservation.controls['smoking'].value" textWrap="true"></Label>
+                    <Label class="h3" row="2" col="0" text="Date and Time"></Label>
+                    <Label row="2" col="1" [text]="reservation.controls['dateTime'].value | date: 'medium'" textWrap="true"></Label>
+                </GridLayout>
+            </StackLayout>
         </GridLayout>
     </ScrollView>
 </RadSideDrawer>

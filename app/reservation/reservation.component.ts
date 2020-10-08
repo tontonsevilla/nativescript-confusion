@@ -5,6 +5,9 @@ import { Validators, FormBuilder, FormGroup} from '@angular/forms';
 import { ModalDialogService, ModalDialogOptions } from "nativescript-angular/modal-dialog";
 import { ReservationModalComponent } from "../reservationmodal/reservationmodal.component";
 import { DrawerPage } from '~/shared/drawer/drawer.page';
+import { Page, View } from 'tns-core-modules/ui/page';
+import { CouchbaseService } from '~/services/couchbase.service';
+import * as enums from "ui/enums";
 
 @Component({
     selector: 'app-reservation',
@@ -15,12 +18,17 @@ import { DrawerPage } from '~/shared/drawer/drawer.page';
 export class ReservationComponent extends DrawerPage implements OnInit {
 
     reservation: FormGroup;
+    submitted = false;
+    docId: string = "reservations";
+    reservations: Array<any> = [];
 
     constructor(
         private formBuilder: FormBuilder,
         private modalService: ModalDialogService, 
         private vcRef: ViewContainerRef,
-        private changeDetectorRef: ChangeDetectorRef
+        private changeDetectorRef: ChangeDetectorRef,
+        private couchbaseService: CouchbaseService,
+        private page: Page
     ) {
 
         super(changeDetectorRef);
@@ -30,6 +38,13 @@ export class ReservationComponent extends DrawerPage implements OnInit {
             smoking: false,
             dateTime: ['', Validators.required]
         });
+
+        let doc = this.couchbaseService.getDocument(this.docId);
+        if(doc == null) {
+            this.couchbaseService.createDocument({"reservations": []}, this.docId);
+        } else {
+            this.reservations = doc.reservations;
+        }
     }
 
     ngOnInit() {
@@ -54,12 +69,41 @@ export class ReservationComponent extends DrawerPage implements OnInit {
 
     onDateTimeChange(args) {
         let textField = <TextField>args.object;
-
+        
         this.reservation.patchValue({ dateTime: textField.text});
     }
 
     onSubmit() {
-        console.log(JSON.stringify(this.reservation.value));
+        this.reservations.push(this.reservation.value);
+        this.couchbaseService.updateDocument(this.docId, {"reservations": this.reservations});
+
+        console.log(this.couchbaseService.getDocument(this.docId));
+
+        let reservationForm: View;
+        let reservationFormReadOnly: View;
+
+        reservationForm = this.page.getViewById<View>('reservationForm');
+        reservationFormReadOnly = this.page.getViewById<View>('reservationFormReadOnly');
+
+        reservationForm.animate({
+            opacity: 0,
+            duration: 500,
+            scale: { x: 0, y: 0 }
+        }).then(() => {
+            
+            reservationFormReadOnly.animate({
+                opacity: 0,
+                scale: { x: 0, y: 0 }
+            }).then(() => {
+                this.submitted = true;
+
+                reservationFormReadOnly.animate({
+                    opacity: 1,
+                    duration: 500,
+                    scale: { x: 1, y: 1 }
+                });
+            });
+        });
     }
 
     createModalView(args) {
